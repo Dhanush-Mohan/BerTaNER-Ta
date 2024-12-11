@@ -84,8 +84,98 @@ Both models use **Layer-wise Learning Rate Decay (LLRD)** for stable and effecti
 
 ---
 
-## **Installation and Setup**  
-### **Clone the Repository**  
+## **Installation and Setup**
+
+### **Install Dependencies**
+Install all required dependencies:
 ```bash
-git clone https://github.com/your-username/BerTaNER-Ta.git
-cd BerTaNER-Ta
+pip install -r requirements.txt
+```
+
+### **Environment Configuration**
+Ensure that you have:
+- Python 3.8+
+- Libraries: `transformers`, `torch`, `sklearn`
+
+---
+
+
+## **Usage**
+
+### **Data Preprocessing**
+Prepare the dataset for training using the following command:
+```bash
+python preprocess.py --dataset [WikiANN|Xtreme]
+```
+
+### **Model Training**
+Train the selected model with configurations defined in JSON files:
+```bash
+python train.py --model [TamilBERT|mBERT] --config configs/model_config.json
+```
+
+### **Evaluation**
+Evaluate the trained model on the test dataset:
+```bash
+python evaluate.py --model [TamilBERT|mBERT]
+```
+
+---
+
+## **Results**
+
+| **Model**            | **Learning Rate** | **Batch Size** | **Dropout** | **Eval Loss** | **Precision** | **Recall** | **F1 Score** |
+|-----------------------|-------------------|----------------|-------------|---------------|---------------|------------|--------------|
+| TamilBERT             | 0.00001          | 16             | 0.3         | 1.214         | 0.679         | 0.655      | 0.669        |
+| TamilBERT             | 0.00001          | 32             | 0.3         | 1.499         | 0.541         | 0.521      | 0.531        |
+| TamilBERT             | 0.00005          | 16             | 0.4         | 1.396         | 0.455         | 0.436      | 0.445        |
+| Multilingual BERT     | 0.00002          | 16             | 0.3         | 1.190         | 0.734         | 0.691      | 0.712        |
+
+---
+
+## **Future Work**
+
+1. Incorporating noisy Tamil text to improve model generalization.
+2. Exploring hybrid models that combine rule-based and machine learning approaches.
+3. Extending the framework to support other low-resource languages.
+
+---
+
+## **Contributing**
+
+Contributions are welcome! Follow these steps:
+
+1. **Fork the Repository**  
+   Create your own copy of the repository.
+
+2. **Create a New Branch**
+   ```bash
+   git checkout -b feature-name
+   ```
+
+3. **Commit Your Changes**
+   ```bash
+   git commit -m "Add feature"
+   ```
+
+4. **Push to the Branch**
+   ```bash
+   git push origin feature-name
+   ```
+
+5. **Submit a Pull Request**
+   Open a pull request to the main repository.
+
+---
+
+## **License**
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## **Acknowledgements**
+
+- **L3Cube Pune** for the TamilBERT model.
+- **Google** for the Xtreme dataset.
+- Open-source contributors for tools and resources used in this project.
