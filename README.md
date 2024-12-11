@@ -1,6 +1,6 @@
 # **BerTaNER - A Contemporary Approach for Named Entity Recognition in Tamil**  
 
-BerTaNER is a machine learning project aimed at improving Named Entity Recognition (NER) for Tamil, a morphologically rich and low-resource language. By fine-tuning transformer-based models, TamilBERT and Multilingual BERT (mBERT), BerTaNER provides a robust solution for identifying named entities in Tamil text.  
+BerTaNER is a machine learning and NLP project aimed at improving Named Entity Recognition (NER) for Tamil, a morphologically rich and low-resource language. By fine-tuning transformer-based models, TamilBERT and Multilingual BERT (mBERT), BerTaNER provides a robust solution for identifying named entities in Tamil text.  
 
 ---
 
