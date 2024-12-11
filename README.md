@@ -87,5 +87,5 @@ Both models use **Layer-wise Learning Rate Decay (LLRD)** for stable and effecti
 ## **Installation and Setup**  
 ### **Clone the Repository**  
 ```bash
-git clone https://github.com/your-username/BerTaNER.git
-cd BerTaNER
+git clone https://github.com/your-username/BerTaNER-Ta.git
+cd BerTaNER-Ta
