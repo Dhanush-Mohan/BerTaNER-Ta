@@ -1,181 +1,171 @@
-# **BerTaNER - A Contemporary Approach for Named Entity Recognition in Tamil**  
+# BerTaNER: Tamil NER Framework with Adaptive Layerwise Learning Rate Decay (A-LLRD)
 
-BerTaNER is a machine learning and NLP project aimed at improving Named Entity Recognition (NER) for Tamil, a morphologically rich and low-resource language. By fine-tuning transformer-based models, TamilBERT and Multilingual BERT (mBERT), BerTaNER provides a robust solution for identifying named entities in Tamil text.  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
----
+## Overview
 
-## **Table of Contents**  
-1. [Introduction](#introduction)  
-2. [Features](#features)  
-3. [Project Workflow](#project-workflow)  
-4. [Datasets](#datasets)  
-5. [Model Configurations](#model-configurations)  
-6. [Installation and Setup](#installation-and-setup)  
-7. [Usage](#usage)  
-8. [Results](#results)  
-9. [Future Work](#future-work)  
-10. [Contributing](#contributing)  
-11. [License](#license)  
+BerTaNER is a Named Entity Recognition (NER) framework for Tamil, leveraging TamilBERT fine-tuned with Adaptive Layerwise Learning Rate Decay (A-LLRD). A-LLRD dynamically adjusts per-layer learning rates based on gradient norms, achieving a 2.3% F1-score improvement over standard LLRD on the XTREME dataset (F1: 0.8968 vs. 0.8742). This framework enhances NER performance for morphologically complex, low-resource languages like Tamil, supporting applications such as document analysis and AI-driven Tamil language tools.
 
----
+The project evaluates TamilBERT and mBERT on the XTREME (PAN-X.ta) and IndicGLUE datasets, with cross-lingual experiments on Telugu, Malayalam, Hindi, and Kannada. A BiLSTM-CRF baseline and statistical analysis (McNemar’s test) are included to validate performance. 
 
-## **Introduction**  
-Named Entity Recognition (NER) is a key task in natural language processing (NLP), which identifies and classifies entities such as names, locations, and organizations in text.  
-### **Challenges in Tamil NER**  
-- Tamil's rich morphology and complex structure.  
-- Low availability of annotated datasets for training.  
-- Handling noisy and colloquial Tamil text.  
+## Repository Structure
 
-BerTaNER focuses on overcoming these challenges by leveraging transformer-based language models fine-tuned specifically for Tamil.  
-
----
-
-## **Features**  
-- **Pretrained Models**: Utilizes TamilBERT and Multilingual BERT for NER tasks.  
-- **Advanced Fine-Tuning Techniques**: Implements Layer-wise Learning Rate Decay (LLRD) and dropout regularization.  
-- **Token Classification**: Efficiently classifies entities at the token level.  
-- **Customizable Pipeline**: Modular design for data preprocessing, model training, and evaluation.  
-
----
-
-## **Project Workflow**  
-The workflow consists of the following steps:  
-1. **Data Preprocessing**  
-   - Cleaning and tokenizing the datasets.  
-   - Aligning tokens with the respective labels.  
-
-2. **Model Training**  
-   - Fine-tuning TamilBERT and mBERT with customized configurations.  
-   - Regularization with dropout and LLRD.  
-
-3. **Evaluation**  
-   - Measuring loss, accuracy, precision, recall, and F1 score.  
-
-4. **Comparison**  
-   - Comparative performance analysis of TamilBERT and mBERT.  
-
----
-
-## **Datasets**  
-### **WikiANN Dataset**  
-- Multilingual NER dataset used for TamilBERT fine-tuning.  
-- Includes annotations for person, location, and organization entities.  
-
-### **Google Xtreme Dataset**  
-- Another multilingual dataset used for mBERT fine-tuning.  
-- Provides additional contextual data for better model generalization.  
-
----
-
-## **Model Configurations**  
-### **TamilBERT**  
-- Pretrained model: `l3cube-pune/tamil-bert`.  
-- Learning Rate: `1e-5`.  
-- Batch Size: `16` and `32`.  
-- Dropout: `0.3` and `0.4`.  
-
-### **Multilingual BERT (mBERT)**  
-- Pretrained model: `bert-base-multilingual-cased`.  
-- Learning Rate: `2e-5`.  
-- Batch Size: `16` and `32`.  
-- Dropout: `0.3` and `0.4`.  
-
-Both models use **Layer-wise Learning Rate Decay (LLRD)** for stable and effective fine-tuning of deeper layers.  
-
----
-
-## **Installation and Setup**
-
-### **Install Dependencies**
-Install all required dependencies:
-```bash
-pip install -r requirements.txt
+```
+BerTaNER/
+├── notebooks/                    # Jupyter notebooks for experiments
+│   ├── xtreme/                   # XTREME dataset experiments
+│   │   ├── tamilbert/            # TamilBERT models
+│   │   ├── mbert/                # mBERT models
+│   │   ├── cross_lingual/        # Cross-lingual experiments (Hindi, Kannada, Malayalam, Telugu)
+│   ├── indicglue/                # IndicGLUE dataset experiments
+│   │   ├── tamilbert/
+│   │   ├── mbert/
+│   ├── baselines/                # BiLSTM-CRF baseline
+│   ├── statistical_analysis/     # McNemar's test
+├── figures/                      # Visualizations (e.g., contingency table, training dynamics)
+├── paper/                        # Research paper PDF
+├── requirements.txt              # Python dependencies
+├── README.md                     # This file
 ```
 
-### **Environment Configuration**
-Ensure that you have:
+## Setup
+
+### Prerequisites
 - Python 3.8+
-- Libraries: `transformers`, `torch`, `sklearn`
+- Kaggle account (for GPU access)
+- Google Colab or local environment with GPU (e.g., NVIDIA P100, 16GB VRAM)
 
----
-
-
-## **Usage**
-
-### **Data Preprocessing**
-Prepare the dataset for training using the following command:
-```bash
-python preprocess.py --dataset [WikiANN|Xtreme]
-```
-
-### **Model Training**
-Train the selected model with configurations defined in JSON files:
-```bash
-python train.py --model [TamilBERT|mBERT] --config configs/model_config.json
-```
-
-### **Evaluation**
-Evaluate the trained model on the test dataset:
-```bash
-python evaluate.py --model [TamilBERT|mBERT]
-```
-
----
-
-## **Results**
-
-| **Model**            | **Learning Rate** | **Batch Size** | **Dropout** | **Eval Loss** | **Precision** | **Recall** | **F1 Score** |
-|-----------------------|-------------------|----------------|-------------|---------------|---------------|------------|--------------|
-| TamilBERT             | 0.00001          | 16             | 0.3         | 1.214         | 0.679         | 0.655      | 0.669        |
-| TamilBERT             | 0.00001          | 32             | 0.3         | 1.499         | 0.541         | 0.521      | 0.531        |
-| TamilBERT             | 0.00005          | 16             | 0.4         | 1.396         | 0.455         | 0.436      | 0.445        |
-| Multilingual BERT     | 0.00002          | 16             | 0.3         | 1.190         | 0.734         | 0.691      | 0.712        |
-
----
-
-## **Future Work**
-
-1. Incorporating noisy Tamil text to improve model generalization.
-2. Exploring hybrid models that combine rule-based and machine learning approaches.
-3. Extending the framework to support other low-resource languages.
-
----
-
-## **Contributing**
-
-Contributions are welcome! Follow these steps:
-
-1. **Fork the Repository**  
-   Create your own copy of the repository.
-
-2. **Create a New Branch**
+### Installation
+1. Clone the repository:
    ```bash
-   git checkout -b feature-name
+   git clone https://github.com/Dhanush-Mohan/BerTaNER-Ta.git
+   cd BerTaNER
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. For Kaggle or Colab, upload notebooks and install dependencies via:
+   ```python
+   !pip install torch transformers datasets seqeval pandas numpy scipy statsmodels matplotlib seaborn
    ```
 
-3. **Commit Your Changes**
-   ```bash
-   git commit -m "Add feature"
-   ```
+### Datasets
+- **XTREME (PAN-X.ta)**: Tamil NER subset (~15,000 train, ~1,000 validation/test sentences). Download from Hugging Face:
+  ```python
+  from datasets import load_dataset
+  dataset = load_dataset("xtreme", "PAN-X.ta")
+  ```
+- **IndicGLUE (NER)**: Tamil NER dataset (~20,466 train, ~2,586 validation, ~2,611 test sentences). Download from Hugging Face:
+  ```python
+  dataset = load_dataset("indic_glue", "ner")
+  ```
 
-4. **Push to the Branch**
-   ```bash
-   git push origin feature-name
-   ```
+## Running Experiments
 
-5. **Submit a Pull Request**
-   Open a pull request to the main repository.
+1. **Notebooks**:
+   - **XTREME Experiments**:
+     - `xtreme_TamilBERT_A_LLRD.ipynb`: TamilBERT with A-LLRD (F1: 0.8968).
+     - `xtreme_TamilBERT_LLRD.ipynb`: TamilBERT with LLRD (F1: 0.8742).
+     - `xtreme_mBERT_A_LLRD.ipynb`: mBERT with A-LLRD (F1: 0.8517).
+     - `xtreme_mBERT_LLRD.ipynb`: mBERT with LLRD (F1: 0.8611).
+     - Cross-lingual: `xtreme_hindi_mbert_a_llrd.ipynb`, etc. (F1: 0.7625–0.8924).
+   - **IndicGLUE Experiments**:
+     - `indicglue_TamilBERT_A_LLRD.ipynb`: TamilBERT with A-LLRD (F1: 0.8912).
+     - `indicglue_TamilBERT_LLRD.ipynb`: TamilBERT with LLRD (F1: 0.8836).
+     - `indicglue_mBERT_A_LLRD.ipynb`: mBERT with A-LLRD (F1: 0.8588).
+     - `indicglue_mBERT_LLRD.ipynb`: mBERT with LLRD (F1: 0.8630).
+   - **Baseline**:
+     - `bilstm-crf-non-transformer.ipynb`: BiLSTM-CRF (F1: 0.4560 XTREME, 0.5530 IndicGLUE).
+   - **Statistical Analysis**:
+     - `bertaner_mcnemartest.ipynb`: McNemar’s test comparing TamilBERT vs. mBERT (p < 0.05).
 
----
+2. **Execution**:
+   - Run notebooks in Kaggle (P100 GPU) or Colab with GPU enabled.
+   - Update model paths in notebooks (e.g., `l3cube-pune/tamil-bert`, `bert-base-multilingual-cased`).
+   - Ensure datasets are loaded via Hugging Face `datasets` library.
 
-## **License**
+3. **Hyperparameters** (from paper):
+   - Base learning rate: 2e-5
+   - A-LLRD: min_decay=0.8, max_decay=0.95, ε=1e-8
+   - Batch size: 16
+   - Epochs: 10
+   - Optimizer: AdamW (weight decay=0.01)
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## Results
 
----
+### Tamil NER Performance (Table I)
+| Model              | Dataset   | F1     | Precision | Recall | Accuracy |
+|--------------------|-----------|--------|-----------|--------|----------|
+| TamilBERT (A-LLRD) | XTREME    | 0.8968 | 0.8835    | 0.9106 | 0.9662   |
+| TamilBERT (LLRD)   | XTREME    | 0.8742 | 0.8615    | 0.8872 | 0.9557   |
+| mBERT (A-LLRD)     | XTREME    | 0.8517 | 0.8340    | 0.8703 | 0.9522   |
+| mBERT (LLRD)       | XTREME    | 0.8611 | 0.8393    | 0.8840 | 0.9540   |
+| BiLSTM-CRF         | XTREME    | 0.4560 | 0.5570    | 0.3860 | 0.7904   |
+| TamilBERT (A-LLRD) | IndicGLUE | 0.8912 | 0.8916    | 0.8907 | 0.9375   |
+| TamilBERT (LLRD)   | IndicGLUE | 0.8836 | 0.8793    | 0.8880 | 0.9353   |
+| mBERT (A-LLRD)     | IndicGLUE | 0.8588 | 0.8575    | 0.8601 | 0.9445   |
+| mBERT (LLRD)       | IndicGLUE | 0.8630 | 0.8554    | 0.8707 | 0.9465   |
+| BiLSTM-CRF         | IndicGLUE | 0.5530 | 0.6110    | 0.5049 | 0.7662   |
 
-## **Acknowledgements**
+### Cross-Lingual Performance
+| Language  | F1     | Precision | Recall | Accuracy |
+|-----------|--------|-----------|--------|----------|
+| Telugu    | 0.7625 | 0.7212    | 0.8087 | 0.9243   |
+| Malayalam | 0.8461 | 0.8355    | 0.8570 | 0.9538   |
+| Hindi     | 0.8924 | 0.8835    | 0.9015 | 0.9467   |
+| Kannada   | 0.8682 | 0.8642    | 0.8723 | 0.9577   |
 
-- **L3Cube Pune** for the TamilBERT model.
-- **Google** for the Xtreme dataset.
-- Open-source contributors for tools and resources used in this project.
+### SOTA Comparison (IndicGLUE, Table II)
+| Model                      | F1 Score (%) |
+|----------------------------|--------------|
+| TamilBERT (A-LLRD)         | 89.12        |
+| TamilBERT (LLRD)           | 88.36        |
+| mBERT (LLRD)               | 86.30        |
+| mBERT (A-LLRD)             | 85.88        |
+| MuRIL                      | 83.48        |
+| IndicBERTv2-MLM-Sam-TLM    | 68.55        |
+| IndicBERTv2-MLM-only       | 66.92        |
+| XLM-R                      | 66.21        |
+| Distil-mBERT               | 64.02        |
+| IndicNER                   | 42.45        |
+
+### Key Findings
+- TamilBERT with A-LLRD achieves SOTA F1-scores: 0.8968 (XTREME), 0.8912 (IndicGLUE).
+- A-LLRD improves TamilBERT by ~2.3% over LLRD on XTREME.
+- McNemar’s test confirms TamilBERT’s superiority over mBERT (p < 0.05, 5415 tokens correct by TamilBERT vs. 94 by mBERT).
+- A-LLRD generalizes well across Telugu, Malayalam, Hindi, and Kannada.
+
+## Visualizations
+- **McNemar’s Test Heatmap**: `figures/contingency_table_heatmap.png`
+  ![contingency_table_heatmap](https://github.com/user-attachments/assets/b35a9922-e276-4bcd-a72e-a853ff176dc1)
+
+- **Training Dynamics**: `figures/training_dynamics_plot.png`
+  ![training_dynamics_plot](https://github.com/user-attachments/assets/a1dc9094-9ab0-4ce4-86d3-bfa75f73a78f)
+
+
+## Citation
+If you use BerTaNER, please cite:
+```bibtex
+@article{dhanush2025bertaner, 
+  title={BerTaNER: A Tamil NER Framework Fine-Tuned with Adaptive Layerwise Learning Rate Decay (A-LLRD)},
+  author={Dhanush Mohanasundaram and Sushmetha Sumathi Rajendran and Pritika Kannapiran and Johanan Joysingh S},
+  journal={TBD},
+  year={2025}
+}
+```
+
+## References
+1. Hu et al., "XTREME: A Benchmark for Evaluating Cross-lingual Generalization," EMNLP 2020.
+2. Kakwani et al., "IndicNLPSuite: Monolingual Corpora and Pre-trained Models for Indian Languages," Findings of EMNLP 2020.
+3. Ro and Choi, "AutoLR: Layer-wise Pruning and Auto-tuning of Learning Rates," AAAI 2021.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+For questions, contact:
+- Dhanush Mohanasundaram: dhanush.m2021@vitstudent.ac.in
+- Sushmetha Sumathi Rajendran: sushmetha.sr2021@vitstudent.ac.in
+- Pritika Kannapiran: pritika.k2021@vitstudent.ac.in
+- Johanan Joysingh: johanajoysingh.s@vit.ac.in
