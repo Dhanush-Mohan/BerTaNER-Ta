@@ -54,11 +54,12 @@ BerTaNER/
 - **XTREME (PAN-X.ta)**: Tamil NER subset (~15,000 train, ~1,000 validation/test sentences). Download from Hugging Face:
   ```python
   from datasets import load_dataset
-  dataset = load_dataset("xtreme", "PAN-X.ta")
+  dataset = load_dataset("google/xtreme", "PAN-X.ta")
   ```
 - **IndicGLUE (NER)**: Tamil NER dataset (~20,466 train, ~2,586 validation, ~2,611 test sentences). Download from Hugging Face:
   ```python
-  dataset = load_dataset("indic_glue", "ner")
+  from datasets import load_dataset
+  dataset = load_dataset("ai4bharat/indic_glue", "wiki-ner.ta")
   ```
 
 ## Running Experiments
@@ -133,12 +134,13 @@ BerTaNER/
 ### Key Findings
 - TamilBERT with A-LLRD achieves SOTA F1-scores: 0.8968 (XTREME), 0.8912 (IndicGLUE).
 - A-LLRD improves TamilBERT by ~2.3% over LLRD on XTREME.
-- McNemar’s test confirms TamilBERT’s superiority over mBERT (p < 0.05, 5415 tokens correct by TamilBERT vs. 94 by mBERT).
+- McNemar’s test confirms TamilBERT’s superiority over mBERT (p < 0.05, 5450 tokens correct by TamilBERT vs. 97 by mBERT).
 - A-LLRD generalizes well across Telugu, Malayalam, Hindi, and Kannada.
 
 ## Visualizations
 - **McNemar’s Test Heatmap**: `figures/contingency_table_heatmap.png`
-  ![contingency_table_heatmap](https://github.com/user-attachments/assets/b35a9922-e276-4bcd-a72e-a853ff176dc1)
+  ![ct_orange](https://github.com/user-attachments/assets/f91ee0f3-6be5-49ce-b6c2-fbf1fbdb62ec)
+
 
 - **Training Dynamics**: `figures/training_dynamics_plot.png`
   ![training_dynamics_plot](https://github.com/user-attachments/assets/a1dc9094-9ab0-4ce4-86d3-bfa75f73a78f)
@@ -147,11 +149,12 @@ BerTaNER/
 ## Citation
 If you use BerTaNER, please cite:
 ```bibtex
-@article{dhanush2025bertaner, 
+@inproceedings{dhanush2025bertaner, 
   title={BerTaNER: A Tamil NER Framework Fine-Tuned with Adaptive Layerwise Learning Rate Decay (A-LLRD)},
   author={Dhanush Mohanasundaram and Sushmetha Sumathi Rajendran and Pritika Kannapiran and Johanan Joysingh S},
-  journal={TBD},
-  year={2025}
+  booktitle={Proceedings of the 2025 International Conference on Intelligent Computing and Knowledge Extraction (ICICKE)},
+  year={2025},
+  organization={IEEE}
 }
 ```
 
